@@ -23,15 +23,10 @@ const server = new ApolloServer({
   resolvers
 });
 
-mongoose.connect(process.env.MONGODB_CONN, {useNewUrlParser: true})
-  .then(() => {
-    console.log("[📥] MongoDB Connection successful");
-    return startStandaloneServer(server, {
-      listen: { 
-        port: process.env.APOLLO_PORT,
-      },
-    })
-  })
-  .then(({url}) => {
-    console.log(`[🚀] Server running at ${url}`);
-  })
+const app = express();
+server.applyMiddleware({ app });
+
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log(`Servidor Apollo en ejecución en http://localhost:${PORT}/graphql`);
+});
