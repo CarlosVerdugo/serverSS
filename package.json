@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "node index.js",
-    "start":"serve build -s -n -L -p"
+    "start":"serve build"
   },
   "keywords": [],
   "author": "",
