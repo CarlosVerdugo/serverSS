@@ -5,8 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node index.js",
-    "start":"serve build"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
