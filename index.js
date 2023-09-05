@@ -25,7 +25,7 @@ const server = new ApolloServer({
 });
 
 const app = express();
-server.applyMiddleware({ app });
+server.applyExpressMiddleware({ app });
 
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Conexión exitosa a MongoDB'))
