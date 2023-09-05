@@ -28,6 +28,7 @@ mongoose.connect(process.env.MONGODB_CONN, {useNewUrlParser: true})
     console.log("[📥] MongoDB Connection successful");
     return startStandaloneServer(server, {
       listen: { 
+        host: "https://serverss-production.up.railway.app",
         port: process.env.APOLLO_PORT,
       },
     })
