@@ -20,7 +20,12 @@ let typeDefs = `#graphql
 
 const server = new ApolloServer({
   typeDefs,
-  resolvers
+  resolvers,
+  cors: {
+    origin: '*', // Reemplaza con tu dominio de cliente
+    credentials: true, // Si es necesario para tu aplicación
+  },
+  introspection: true
 });
 
 mongoose.connect(process.env.MONGODB_CONN, {useNewUrlParser: true})
