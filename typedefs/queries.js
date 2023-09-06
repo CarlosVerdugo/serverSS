@@ -10,6 +10,7 @@ export default `#graphql
     pacientes: [Paciente!]
     sesiones(rut: String!): [Sesion]
     sesion(id: Int!): Sesion!
+    Objetivos: [Objetivo]
   }
 
 `

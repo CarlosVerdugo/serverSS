@@ -20,19 +20,15 @@ let typeDefs = `#graphql
 
 const server = new ApolloServer({
   typeDefs,
-  resolvers,
-  cors: {
-    origin: "*", // Reemplaza con tu dominio público
-    credentials: true, // Si es necesario para tu aplicación
-  },
+  resolvers
 });
 
 mongoose.connect(process.env.MONGODB_CONN, {useNewUrlParser: true})
   .then(() => {
     console.log("[📥] MongoDB Connection successful");
     return startStandaloneServer(server, {
-      listen: {
-        port: process.env.PORT,
+      listen: { 
+        port: process.env.APOLLO_PORT,
       },
     })
   })

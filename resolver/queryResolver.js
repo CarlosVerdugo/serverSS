@@ -38,6 +38,9 @@ export default {
         },
         async logIn(_, {email, password}) {
             return await md.User.findOne({email: email, password: password});
+        },
+        async Objetivos() {
+            return await md.Objetivo.find().sort();
         }
     },
 
