@@ -6,13 +6,15 @@ export default `#graphql
     # Crear objetivo
     newObj(nombre: String!): Objetivo
     # Autoevaluacion
-    autoEval(actId: Int!, critId: Int!, evaluacion: Float!, comentarios: String): ActividadCasa
+    autoEval(actId: Int!, critId: String!, evaluation: Float!, comentarios: String): ActividadCasa
     # Crear actividades
     newActivity(actividad: newAct): Actividad
+    # Actualizar actividad
+    upActivity(id: Int!, actividad: newAct): Actividad
     # Crear sesion
     newSesion(sesion: newSes): Sesion
     # Evaluar sesion
-    actEval(sesionId: Int!, actId: Int!, critId: Int!, evaluation: Float!): Sesion
+    actEval(sesionId: Int!, actId: Int!, critId: String!, evaluation: Float!): Sesion
     sesionEval(id: Int!, evaluation: Float!, comment: String): Sesion
   }
 

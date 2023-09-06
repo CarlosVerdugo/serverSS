@@ -9,7 +9,7 @@ const User_sch = new Schema({
 }, {collection: 'usuarios', versionKey: false});
 
 const CriterioExito_sch = new Schema({
-    _id: Number,
+    _id: String,
     nombre: String,
     porcentaje_logro: Number
 }, {autoCreate: false});

@@ -19,6 +19,9 @@ export default {
                 return await md.Actividad.find({email_usr: fono}).sort({nombre: -1});
             }
         },
+        async actividad(_, {id}) {
+            return await md.Actividad.findById(id);
+        },
         async actividadesEnCasa() {
             return await md.ActividadCasa.find().sort({nombre: 1});
         },
@@ -50,8 +53,9 @@ export default {
             newId++;
             const crits = [];
             for (let i = 0; i < actividad.criterios_exito.length; i++) {
+                let cId = i + 1;
                 crits.push({
-                    _id: i + 1,
+                    _id: newId.toString() + "-" + cId.toString(),
                     nombre: actividad.criterios_exito[i],
                     porcentaje_logro: 0,
                 });
@@ -66,6 +70,26 @@ export default {
                 materiales: actividad.materiales,
             });
             await res.save();
+            return res;
+        },
+        async upActivity(_, {id, actividad}) {
+            const crits = [];
+            for (let i = 0; i < actividad.criterios_exito.length; i++) {
+                let cId = i + 1;
+                crits.push({
+                    _id: id.toString() + "-" + cId.toString(),
+                    nombre: actividad.criterios_exito[i],
+                    porcentaje_logro: 0,
+                });
+            }
+            const res = await md.Actividad.findByIdAndUpdate({_id: id}, {
+                email_usr: actividad.email_usr,
+                nombre: actividad.nombre,
+                descripcion: actividad.descripcion,
+                objetivo: actividad.objetivo,
+                criterios_exito: crits,
+                materiales: actividad.materiales,
+            }, {new: true});
             return res;
         },
         async newSesion(_, {sesion}) {
@@ -111,6 +135,7 @@ export default {
                 act.$set("comentarios", comentarios);
             }
             act.criterios_exito.id(critId).$set("porcentaje_logro", evaluation);
+            act.$set("evaluada", true);
             await act.save();
             return await md.ActividadCasa.findById(actId);
         },

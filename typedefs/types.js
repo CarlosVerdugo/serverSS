@@ -1,7 +1,7 @@
 export default `#graphql
 
   type CriterioExito {
-    id: Int!
+    id: String!
     nombre: String!
     porcentaje_logro: Float
   }
