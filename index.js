@@ -22,7 +22,7 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   cors: {
-    origin: "*", // Reemplaza con tu dominio público
+    origin: "serverss-production.up.railway.app", // Reemplaza con tu dominio público
     credentials: true, // Si es necesario para tu aplicación
   },
   introspection: true
