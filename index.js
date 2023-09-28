@@ -37,7 +37,12 @@ function auth({ req }) {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: auth
+  context: auth,
+  cors: {
+    origin: "serverss-production.up.railway.app", // Reemplaza con tu dominio público
+    credentials: true, // Si es necesario para tu aplicación
+  },
+  introspection: true
 });
 
 mongoose.connect(process.env.MONGODB_CONN, {useNewUrlParser: true})
@@ -45,7 +50,7 @@ mongoose.connect(process.env.MONGODB_CONN, {useNewUrlParser: true})
     console.log("[📥] MongoDB Connection successful");
     return startStandaloneServer(server, {
       listen: { 
-        port: process.env.APOLLO_PORT,
+        port: process.env.PORT,
       },
     })
   })
