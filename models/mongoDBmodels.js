@@ -5,7 +5,9 @@ const User_sch = new Schema({
     password: String,
     type: String,
     full_name: String,
-    pacientes: [String]
+    pacientes: [String],
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now }
 }, {collection: 'usuarios', versionKey: false});
 
 const CriterioExito_sch = new Schema({
@@ -54,13 +56,25 @@ const Paciente_sch = new Schema({
     rut: String,
     nombre_completo: String,
     fecha_nacimiento: String,
-    edad: Number,
-    curso: String,
+    edad: { type: Number, default: 0},
+    curso: { type: String, default: ''},
     direccion: String,
     diagnostico: String,
     sesiones: [Number],
-    actividades_casa: [Number]
+    actividades_casa: [Number],
+    createdAt: String,
+    updatedAt: String
 }, {collection: 'pacientes', versionKey: false});
+
+const PortalAct_sch = new Schema({
+    _id: Number,
+    nombre: String,
+    descripcion: String,
+    objetivo: Number,
+    criterios_exito: [String],
+    materiales: [String],
+    tag: [String]
+}, {collection: 'portal_expertos_act', versionKey: false});
 
 export const User = model("Usuario", User_sch);
 export const CriterioExito = model("Criterio", CriterioExito_sch)
@@ -69,4 +83,4 @@ export const Actividad = model("Actividad", Actividad_sch);
 export const ActividadCasa = model("ActividadCasa", ActividadCasa_sch);
 export const Sesion = model("Sesion", Sesion_sch);
 export const Paciente = model("Paciente", Paciente_sch);
-
+export const PortalAct = model("PortalAct", PortalAct_sch);

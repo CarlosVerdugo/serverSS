@@ -42,24 +42,46 @@ export default `#graphql
     evaluada: Boolean!
   }
 
+  type EventoCalendario {
+    id: Int!
+    title: String!
+    color: String!
+    start: String!
+    end: String!
+  }
+
   type Paciente {
     rut: String!
     nombre_completo: String!
     fecha_nacimiento: String!
-    edad: Int!
-    curso: String!
+    edad: Int
+    curso: String
     direccion: String!
     diagnostico: String!,
-    sesiones: [Int!]
-    actividades_casa: [Int!]
+    sesiones: [Int]
+    actividades_casa: [Int]
+    createdAt: String!
+    updatedAt: String!
   }
 
   type User {
+    id: ID!
     email: String!
-    password: String!
     type: String!
     full_name: String!
     pacientes: [String]
+    createdAt: Date!
+    updatedAt: Date!
   }  
+
+  type PortalAct {
+    id: Int!
+    nombre: String!
+    descripcion: String!
+    objetivo: Int!
+    criterios_exito: [String!]
+    materiales: [String]
+    tag: [String!]
+  }
 
 `
