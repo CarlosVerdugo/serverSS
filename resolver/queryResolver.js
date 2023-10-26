@@ -162,7 +162,7 @@ export default {
         
     async actividadPortal(_, {id}) {
         return await md.PortalAct.findById(id);
-    },   
+    },
 
     async sesionesCalendario(_, {pacientes_arr}) {
       // Retorna todas las sesiones agendadas para los pacientes a cargo del usuario
@@ -193,7 +193,18 @@ export default {
         }
       }
       return events;
+    },
+
+    async primerIngreso(_, {user}) {
+      const res = await md.Tutorial.findOne({user: user});
+      return res;
+    },
+
+    async getNotifications(_, { recipientId }) {
+      const notifications = await md.Notificacion.find({ recipientUserId: recipientId }).sort({timestamp: -1}).exec();
+      return notifications;
     }
+
   },
 
   Mutation: {
@@ -201,6 +212,14 @@ export default {
     async register(_, { email, password, type, full_name, pacientes }) {
       // Hash the password
       const hashedPassword = await hash(password, 10);
+
+      // Asignar nuevo ingreso al tutorial
+      const tut = new md.Tutorial({
+        user: email,
+        first_time: true,
+        comment: []
+      });
+      await tut.save();
 
       // Create new user doc
       const res = new md.User({
@@ -228,6 +247,7 @@ export default {
 
       // Sends only some attributes of User (for now)
       const res = {
+        id: user.id,
         email: user.email,
         type: user.type,
         full_name: user.full_name,
@@ -437,7 +457,49 @@ export default {
             });
             await res.save();
             return res;
+    },
+
+    async firstTime(_, {user}) {
+      const res = md.Tutorial.findOneAndUpdate({user: user}, {first_time: false}, {new: true});
+      return res;
+    },
+
+    async newNotification(_, { recipient, sender, message, fechaHoraSesion }) {
+      const recipientName = await md.User.findById(recipient).select('full_name -_id');
+      const senderName = await md.User.findById(sender).select('full_name -_id');
+
+      // try-catch para evitar almacenar notificaciones con errores
+      try {
+        const res = new md.Notificacion({
+          recipientUserName: recipientName.full_name,
+          recipientUserId: recipient,
+          senderUserName: senderName.full_name,
+          senderUserId: sender,
+          message: message,
+          fechaHoraSesion: fechaHoraSesion
+        });
+
+        await res.save();
+        return res;
+
+      } catch (error) {
+        return error;
+      }
+      
+    },
+    
+    async setReadNotification(_, { notifId }) {
+      // Return true if updated correctly
+      try {
+        await md.Notificacion.findByIdAndUpdate(notifId, {
+          isRead: true
+        })
+        return true;
+      } catch (error) {
+        return false;
+      }
     }
+
   },
 
 };

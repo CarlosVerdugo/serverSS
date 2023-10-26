@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose"
+import mongoose, { model, Schema } from "mongoose"
 
 const User_sch = new Schema({
     email: String,
@@ -9,6 +9,17 @@ const User_sch = new Schema({
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
 }, {collection: 'usuarios', versionKey: false});
+
+const Notificacion_sch = new Schema({
+    recipientUserName: String,
+    recipientUserId: { type: Schema.Types.ObjectId, ref: 'User' },
+    senderUserName: String,
+    senderUserId: { type: Schema.Types.ObjectId, ref: 'User' },
+    message: String,
+    fechaHoraSesion: { type: String, default: "" },
+    timestamp: { type: Date, default: Date.now },
+    isRead: { type: Boolean, default: false }
+}, {collection: 'notificaciones', versionKey: false});
 
 const CriterioExito_sch = new Schema({
     _id: String,
@@ -63,7 +74,9 @@ const Paciente_sch = new Schema({
     sesiones: [Number],
     actividades_casa: [Number],
     createdAt: String,
-    updatedAt: String
+    updatedAt: String,
+    idFono: { type: Schema.Types.ObjectId, ref: 'User' },
+    idCuid: { type: Schema.Types.ObjectId, ref: 'User' }
 }, {collection: 'pacientes', versionKey: false});
 
 const PortalAct_sch = new Schema({
@@ -76,11 +89,19 @@ const PortalAct_sch = new Schema({
     tag: [String]
 }, {collection: 'portal_expertos_act', versionKey: false});
 
+const Tutorial_sch = new Schema({
+    user: String,
+    first_time: Boolean,
+    comments: [String]
+}, {collection: 'tutorial', versionKey: false});
+
 export const User = model("Usuario", User_sch);
-export const CriterioExito = model("Criterio", CriterioExito_sch)
-export const Objetivo = model("Objetivo", Objetivo_sch)
+export const Notificacion = model("Notificacion", Notificacion_sch);
+export const CriterioExito = model("Criterio", CriterioExito_sch);
+export const Objetivo = model("Objetivo", Objetivo_sch);
 export const Actividad = model("Actividad", Actividad_sch);
 export const ActividadCasa = model("ActividadCasa", ActividadCasa_sch);
 export const Sesion = model("Sesion", Sesion_sch);
 export const Paciente = model("Paciente", Paciente_sch);
 export const PortalAct = model("PortalAct", PortalAct_sch);
+export const Tutorial = model("Tutorial", Tutorial_sch);

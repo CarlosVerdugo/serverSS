@@ -16,6 +16,8 @@ export default `#graphql
     actividadPortal(id: Int!): PortalAct
     pacientesNoAsignados: JSON!
     sesionesCalendario(pacientes_arr: [String]): [EventoCalendario]
+    primerIngreso(user: String!): Tutorial
+    getNotifications(recipientId: ID!): [Notificacion]
   }
 
 `

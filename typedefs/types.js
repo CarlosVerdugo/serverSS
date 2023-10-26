@@ -57,11 +57,13 @@ export default `#graphql
     edad: Int
     curso: String
     direccion: String!
-    diagnostico: String!,
+    diagnostico: String!
     sesiones: [Int]
     actividades_casa: [Int]
     createdAt: String!
     updatedAt: String!
+    idFono: ID!
+    idCuid: ID!
   }
 
   type User {
@@ -82,6 +84,24 @@ export default `#graphql
     criterios_exito: [String!]
     materiales: [String]
     tag: [String!]
+  }
+
+  type Tutorial {
+    user: String!
+    first_time: Boolean
+    comments: [String]
+  }
+
+  type Notificacion {
+    id: ID!
+    recipientUserName: String!
+    recipientUserId: ID!
+    senderUserName: String!
+    senderUserId: ID!
+    message: String!
+    fechaHoraSesion: String
+    timestamp: Date!
+    isRead: Boolean!
   }
 
 `

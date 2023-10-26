@@ -35,6 +35,12 @@ export default `#graphql
     reagendar(id: Int!, fecha: String!): Sesion
     # Subir actividades al portal
     uploadAct(actividad: newPortalAct): PortalAct
+    # Marcar primer ingreso
+    firstTime(user: String!): Tutorial
+
+    # Notifications logic
+    newNotification(recipient: ID!, sender: ID!, message: String!, fechaHoraSesion: String): Notificacion
+    setReadNotification(notifId: ID!): Boolean!
   }
 
 `
