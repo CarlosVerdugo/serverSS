@@ -14,10 +14,13 @@ export default `#graphql
     Objetivos: [Objetivo]
     actividadesPortal(tag: [String]): [PortalAct!]
     actividadPortal(id: Int!): PortalAct
+    documentosPortal(tag: [String]): [PortalDoc!]
+    documentoPortal(id: Int!): PortalDoc
     pacientesNoAsignados: JSON!
     sesionesCalendario(pacientes_arr: [String]): [EventoCalendario]
     primerIngreso(user: String!): Tutorial
     getNotifications(recipientId: ID!): [Notificacion]
+    getTodaySesionFechaHora(sesionesIds: [Int!]): String
   }
 
 `

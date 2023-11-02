@@ -2,6 +2,8 @@ import mongoose, { model, Schema } from "mongoose"
 
 const User_sch = new Schema({
     email: String,
+    telefono: String,
+    foto: String,
     password: String,
     type: String,
     full_name: String,
@@ -15,6 +17,7 @@ const Notificacion_sch = new Schema({
     recipientUserId: { type: Schema.Types.ObjectId, ref: 'User' },
     senderUserName: String,
     senderUserId: { type: Schema.Types.ObjectId, ref: 'User' },
+    patientName: { type: String, default: "" },
     message: String,
     fechaHoraSesion: { type: String, default: "" },
     timestamp: { type: Date, default: Date.now },
@@ -52,6 +55,14 @@ const ActividadCasa_sch = new Schema({
     evaluada: Boolean
 }, {collection: 'actividades_casa', versionKey: false});
 
+const Feedback_sch = new Schema({
+    act: Number,
+    criterios_exito: [CriterioExito_sch],
+    comentarios: String,
+    fecha: String,
+    evaluada: Boolean
+}, {collection: 'feedback', versionKey: false});
+
 const Sesion_sch = new Schema({
     _id: Number,
     numero: Number,
@@ -60,7 +71,9 @@ const Sesion_sch = new Schema({
     actividades: [Number],
     comentarios: String,
     porcentaje_logro: Number,
-    evaluada: Boolean
+    resumen: String,
+    evaluada: Boolean,
+    reagendada: Boolean
 }, {collection: 'sesiones', versionKey: false});
 
 const Paciente_sch = new Schema({
@@ -75,8 +88,8 @@ const Paciente_sch = new Schema({
     actividades_casa: [Number],
     createdAt: String,
     updatedAt: String,
-    idFono: { type: Schema.Types.ObjectId, ref: 'User' },
-    idCuid: { type: Schema.Types.ObjectId, ref: 'User' }
+    idFono: { type: Schema.Types.ObjectId, ref: 'User', default: '' },
+    idCuid: { type: Schema.Types.ObjectId, ref: 'User', default: '' }
 }, {collection: 'pacientes', versionKey: false});
 
 const PortalAct_sch = new Schema({
@@ -88,6 +101,16 @@ const PortalAct_sch = new Schema({
     materiales: [String],
     tag: [String]
 }, {collection: 'portal_expertos_act', versionKey: false});
+
+const PortalDoc_sch = new Schema({
+    _id: Number,
+    user_name: String,
+    user_mail: String,
+    link: String,
+    nombre: String,
+    descripcion: String,
+    tag: [String]
+}, {collection: 'portal_expertos_doc', versionKey: false});
 
 const Tutorial_sch = new Schema({
     user: String,
@@ -101,7 +124,9 @@ export const CriterioExito = model("Criterio", CriterioExito_sch);
 export const Objetivo = model("Objetivo", Objetivo_sch);
 export const Actividad = model("Actividad", Actividad_sch);
 export const ActividadCasa = model("ActividadCasa", ActividadCasa_sch);
+export const Feedback = model("Feedback", Feedback_sch);
 export const Sesion = model("Sesion", Sesion_sch);
 export const Paciente = model("Paciente", Paciente_sch);
 export const PortalAct = model("PortalAct", PortalAct_sch);
+export const PortalDoc = model("PortalDoc", PortalDoc_sch);
 export const Tutorial = model("Tutorial", Tutorial_sch);

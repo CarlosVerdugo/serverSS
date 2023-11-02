@@ -60,6 +60,15 @@ export default `#graphql
     tag: [String!]
   }
 
+  input newPortalDoc {
+    user_name: String!
+    user_mail: String!
+    link: String!
+    nombre: String!
+    descripcion: String
+    tag: [String!]
+  }
+
   # Outputs
 
   type LoginResult {

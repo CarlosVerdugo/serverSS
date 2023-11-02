@@ -31,15 +31,24 @@ export default `#graphql
     # Evaluar sesion
     actEval(sesionId: Int!, actId: Int!, critId: String!, evaluation: Float!): Sesion
     sesionEval(id: Int!, evaluation: Float!, comment: String): Sesion
+
+    # Archivar resumen
+    sesionRes(id: Int!, resumen: String!): Sesion
+
     # Reagendar sesion
     reagendar(id: Int!, fecha: String!): Sesion
+
     # Subir actividades al portal
     uploadAct(actividad: newPortalAct): PortalAct
+
+    # Subir documentos al portal
+    uploadDoc(documento: newPortalDoc): PortalDoc
+    
     # Marcar primer ingreso
     firstTime(user: String!): Tutorial
 
     # Notifications logic
-    newNotification(recipient: ID!, sender: ID!, message: String!, fechaHoraSesion: String): Notificacion
+    newNotification(recipient: ID!, sender: ID!, message: String!, fechaHoraSesion: String, patientName: String): Notificacion
     setReadNotification(notifId: ID!): Boolean!
   }
 

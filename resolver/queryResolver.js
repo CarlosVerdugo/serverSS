@@ -158,10 +158,26 @@ export default {
             } else {
                 return await md.PortalAct.find().sort({_id: -1});
             }
-        },
+    },
         
     async actividadPortal(_, {id}) {
         return await md.PortalAct.findById(id);
+    },
+
+    async documentosPortal(_, {tag}) {
+      if(tag != null) {
+          const Docs = []
+          for (let i = 0; i < tag.length; i++) {
+              Docs.concat(await md.PortalDoc.find({tag: tag[i]}));
+          }
+          return Docs;
+      } else {
+          return await md.PortalDoc.find().sort({_id: -1});
+      }
+    },
+  
+    async documentoPortal(_, {id}) {
+      return await md.PortalDoc.findById(id);
     },
 
     async sesionesCalendario(_, {pacientes_arr}) {
@@ -203,8 +219,25 @@ export default {
     async getNotifications(_, { recipientId }) {
       const notifications = await md.Notificacion.find({ recipientUserId: recipientId }).sort({timestamp: -1}).exec();
       return notifications;
-    }
+    },
 
+    async getTodaySesionFechaHora(_, { sesionesIds }) {
+      let date = "";
+      const today = new Date(Date.now());
+      for (let i = 0; i < sesionesIds.length; i++) {
+        const sesion = await md.Sesion.findById(sesionesIds[i]);
+        const sesionISODate = new Date(parseDatestring(sesion.fecha_hora));
+
+        if (
+          sesionISODate.getFullYear() === today.getFullYear() &&
+          sesionISODate.getMonth() === today.getMonth() &&
+          sesionISODate.getDate() === today.getDate()) {
+            date = sesionISODate.toISOString();
+            break;
+        }
+      }
+      return date;
+    }
   },
 
   Mutation: {
@@ -224,6 +257,8 @@ export default {
       // Create new user doc
       const res = new md.User({
         email: email,
+        telefono: null,
+        foto: null,
         password: hashedPassword,
         type: type,
         full_name: full_name,
@@ -324,7 +359,7 @@ export default {
       act.criterios_exito.id(critId).$set("porcentaje_logro", evaluation);
       act.$set("evaluada", true);
       await act.save();
-      return await md.ActividadCasa.findById(actId);
+      return act;
     },
 
     async newActivity(_, {actividad}) {
@@ -353,7 +388,7 @@ export default {
     },
 
     async newActCasa(_, {actividad}) {
-      let newId = await md.Actividad.count();
+      let newId = await md.ActividadCasa.count();
       newId++;
       const crits = [];
       for (let i = 0; i < actividad.criterios_exito.length; i++) {
@@ -412,7 +447,9 @@ export default {
         actividades: sesion.actividades,
         comentarios: sesion.comentarios,
         porcentaje_logro: 0,
+        resumen: "",
         evaluada: false,
+        reagendada: false,
       });
       await res.save();
       let sesions = pas.sesiones;
@@ -438,8 +475,14 @@ export default {
       }
     },
 
+    async sesionRes(_, {id, resumen}) {
+      await md.Sesion.updateOne({_id: id}, {resumen: resumen});
+      return await md.Sesion.findById(id);
+      
+    },
+
     async reagendar(_, {id, fecha}) {
-      await md.Sesion.updateOne({_id: id}, {fecha_hora: fecha});
+      await md.Sesion.updateOne({_id: id}, {fecha_hora: fecha, reagendada: true});
       return await md.Sesion.findById(id);
     },
 
@@ -459,12 +502,28 @@ export default {
             return res;
     },
 
+    async uploadDoc(_, {documento}) {
+      let newId = await md.PortalDoc.count();
+      newId++;
+      const res = new md.PortalDoc({
+          _id: newId,
+          user_name: documento.user_name,
+          user_mail: documento.user_mail,
+          link: documento.link,
+          nombre: documento.nombre,
+          descripcion: documento.descripcion,
+          tag: documento.tag,
+      });
+      await res.save();
+      return res;
+},
+
     async firstTime(_, {user}) {
       const res = md.Tutorial.findOneAndUpdate({user: user}, {first_time: false}, {new: true});
       return res;
     },
 
-    async newNotification(_, { recipient, sender, message, fechaHoraSesion }) {
+    async newNotification(_, { recipient, sender, message, fechaHoraSesion, patientName }) {
       const recipientName = await md.User.findById(recipient).select('full_name -_id');
       const senderName = await md.User.findById(sender).select('full_name -_id');
 
@@ -475,6 +534,7 @@ export default {
           recipientUserId: recipient,
           senderUserName: senderName.full_name,
           senderUserId: sender,
+          patientName: patientName,
           message: message,
           fechaHoraSesion: fechaHoraSesion
         });

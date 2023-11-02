@@ -31,6 +31,14 @@ export default `#graphql
     evaluada: Boolean!
   }
 
+  type Feedback {
+    act: Int!
+    criterios_exito: [CriterioExito!]
+    comentarios: String
+    fecha: String
+    evaluada: Boolean!
+  }
+
   type Sesion {
     id: Int!
     numero: Int!
@@ -39,7 +47,9 @@ export default `#graphql
     actividades: [Int!]
     comentarios: String
     porcentaje_logro: Float
+    resumen: String
     evaluada: Boolean!
+    reagendada: Boolean!
   }
 
   type EventoCalendario {
@@ -62,13 +72,15 @@ export default `#graphql
     actividades_casa: [Int]
     createdAt: String!
     updatedAt: String!
-    idFono: ID!
-    idCuid: ID!
+    idFono: ID
+    idCuid: ID
   }
 
   type User {
     id: ID!
     email: String!
+    telefono: String
+    foto: String
     type: String!
     full_name: String!
     pacientes: [String]
@@ -86,6 +98,16 @@ export default `#graphql
     tag: [String!]
   }
 
+  type PortalDoc {
+    id: Int!
+    user_name: String!
+    user_mail: String!
+    link: String!
+    nombre: String!
+    descripcion: String
+    tag: [String!]
+  }
+
   type Tutorial {
     user: String!
     first_time: Boolean
@@ -98,6 +120,7 @@ export default `#graphql
     recipientUserId: ID!
     senderUserName: String!
     senderUserId: ID!
+    patientName: String
     message: String!
     fechaHoraSesion: String
     timestamp: Date!
